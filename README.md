@@ -2,7 +2,7 @@
 
 Single-turn **calendar arithmetic** for RLVR / evals on the [Prime Intellect Environments Hub](https://app.primeintellect.ai/dashboard/environments).
 
-Source: [github.com/devtechedge/calendar-math](https://github.com/devtechedge/calendar-math) · Hub: [devtechedge/calendar-math](https://app.primeintellect.ai/dashboard/environments/devtechedge/calendar-math)
+Hub: [devtechedge/calendar-math](https://app.primeintellect.ai/dashboard/environments/devtechedge/calendar-math) · Source: [github.com/devtechedge/calendar-math](https://github.com/devtechedge/calendar-math)
 
 The model is given one of three question types, reasons, and puts a final answer in `<answer>` tags. The grader is pure `datetime` — no LLM-as-judge, no fuzzy string matching on the main reward.
 
@@ -38,19 +38,17 @@ reward = 1.0 * exact_match + 0.2 * format + 0.2 * partial_credit
 
 `vf-eval` on the 15 curated edge cases (`num_eval_examples=15`, 1 rollout):
 
-| Policy | avg reward | exact | format | notes |
+| Policy | avg reward | exact | format | partial |
 | --- | --- | --- | --- | --- |
-| Gold datetime solver (ceiling) | **1.200** | 1.000 | 1.000 | harness check |
-| Naive calendar (`year%4` leaps, inclusive counts) | **0.768** | 0.533 | 1.000 | discrimination check |
-| `minimax/minimax-m2.7:free` via OpenRouter | **0.880** | 0.733 | 0.733 | T=0, max_tokens=1536 |
+| Gold datetime solver (ceiling) | **1.200** | 1.000 | 1.000 | 0.000 |
+| Naive calendar (year%4 leaps, inclusive counts) | **0.768** | 0.533 | 1.000 | 0.173 |
 
 The gold policy is a harness check: install, `load_environment`, rollouts, and the rubric all fire. The naive policy is a discrimination check: century non-leaps and inclusive day-counts do not rubber-stamp 1.2.
 
-OpenRouter run (2026-08-25): 11/15 exact. The 4 misses were **truncated** mid-reasoning (365-day leap offsets and two `days_between` items) — format never closed, so exact=0. Century leap items (1900-02-28, 2000-02-28) scored 1.2.
+Against an API model (needs `OPENAI_API_KEY` or `--provider prime`):
 
 ```bash
-uv run vf-eval calendar-math -n 15 -r 1 -p openrouter \
-  -m minimax/minimax-m2.7:free --max-tokens 1536
+uv run vf-eval calendar-math -n 20 -r 1 -m gpt-4.1-mini
 ```
 
 ## Installation
