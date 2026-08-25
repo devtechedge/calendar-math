@@ -2,7 +2,7 @@
 
 Single-turn **calendar arithmetic** for RLVR / evals on the [Prime Intellect Environments Hub](https://app.primeintellect.ai/dashboard/environments).
 
-Source: [github.com/devtechedge/calendar-math](https://github.com/devtechedge/calendar-math)
+Source: [github.com/devtechedge/calendar-math](https://github.com/devtechedge/calendar-math) · Hub: [devtechedge/calendar-math](https://app.primeintellect.ai/dashboard/environments/devtechedge/calendar-math)
 
 The model is given one of three question types, reasons, and puts a final answer in `<answer>` tags. The grader is pure `datetime` — no LLM-as-judge, no fuzzy string matching on the main reward.
 
@@ -45,10 +45,16 @@ reward = 1.0 * exact_match + 0.2 * format + 0.2 * partial_credit
 
 The gold policy is a harness check: install, `load_environment`, rollouts, and the rubric all fire. The naive policy is a discrimination check: century non-leaps and inclusive day-counts do not rubber-stamp 1.2.
 
-Against an API model (needs `OPENAI_API_KEY` or `--provider prime`):
+Hosted API eval (`openai/gpt-oss-20b` via Prime Inference / hosted `prime eval run`) is **queued behind wallet funding** — the personal balance is `$0.00`, and inference returns payment required. Add a few dollars of inference credit, then:
 
 ```bash
-uv run vf-eval calendar-math -n 20 -r 1 -m gpt-4.1-mini
+prime eval run devtechedge/calendar-math --hosted --follow \
+  -m openai/gpt-4.1-mini -n 20 -r 1 \
+  -a '{"num_eval_examples": 20}' --timeout-minutes 60
+```
+
+```bash
+uv run vf-eval calendar-math -n 20 -r 1 -p prime -m openai/gpt-4.1-mini
 ```
 
 ## Installation
@@ -58,7 +64,7 @@ uv pip install -e .
 python -m pytest tests/test_calendar_math.py -q
 ```
 
-From the Hub (after push):
+From the Hub:
 
 ```bash
 prime env install devtechedge/calendar-math
