@@ -2,6 +2,8 @@
 
 Single-turn **calendar arithmetic** for RLVR / evals on the [Prime Intellect Environments Hub](https://app.primeintellect.ai/dashboard/environments).
 
+Source: [github.com/devtechedge/calendar-math](https://github.com/devtechedge/calendar-math)
+
 The model is given one of three question types, reasons, and puts a final answer in `<answer>` tags. The grader is pure `datetime` — no LLM-as-judge, no fuzzy string matching on the main reward.
 
 | Task | Example prompt | Gold answer |
@@ -32,6 +34,23 @@ reward = 1.0 * exact_match + 0.2 * format + 0.2 * partial_credit
 | `format` | `<answer>...</answer>` present | extra prose outside the tags is ignored |
 | `partial_credit` | near-miss as above | 0 when exact match already fired, so a perfect answer is **1.2** not 1.4 |
 
+## Eval
+
+`vf-eval` on the 15 curated edge cases (`num_eval_examples=15`, 1 rollout):
+
+| Policy | avg reward | exact | format | partial |
+| --- | --- | --- | --- | --- |
+| Gold datetime solver (ceiling) | **1.200** | 1.000 | 1.000 | 0.000 |
+| Naive calendar (year%4 leaps, inclusive counts) | **0.768** | 0.533 | 1.000 | 0.173 |
+
+The gold policy is a harness check: install, `load_environment`, rollouts, and the rubric all fire. The naive policy is a discrimination check: century non-leaps and inclusive day-counts do not rubber-stamp 1.2.
+
+Against an API model (needs `OPENAI_API_KEY` or `--provider prime`):
+
+```bash
+uv run vf-eval calendar-math -n 20 -r 1 -m gpt-4.1-mini
+```
+
 ## Installation
 
 ```bash
@@ -39,7 +58,7 @@ uv pip install -e .
 python -m pytest tests/test_calendar_math.py -q
 ```
 
-After a Hub push:
+From the Hub (after push):
 
 ```bash
 prime env install devtechedge/calendar-math
