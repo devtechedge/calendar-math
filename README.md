@@ -38,23 +38,19 @@ reward = 1.0 * exact_match + 0.2 * format + 0.2 * partial_credit
 
 `vf-eval` on the 15 curated edge cases (`num_eval_examples=15`, 1 rollout):
 
-| Policy | avg reward | exact | format | partial |
+| Policy | avg reward | exact | format | notes |
 | --- | --- | --- | --- | --- |
-| Gold datetime solver (ceiling) | **1.200** | 1.000 | 1.000 | 0.000 |
-| Naive calendar (year%4 leaps, inclusive counts) | **0.768** | 0.533 | 1.000 | 0.173 |
+| Gold datetime solver (ceiling) | **1.200** | 1.000 | 1.000 | harness check |
+| Naive calendar (`year%4` leaps, inclusive counts) | **0.768** | 0.533 | 1.000 | discrimination check |
+| `minimax/minimax-m2.7:free` via OpenRouter | **0.880** | 0.733 | 0.733 | T=0, max_tokens=1536 |
 
 The gold policy is a harness check: install, `load_environment`, rollouts, and the rubric all fire. The naive policy is a discrimination check: century non-leaps and inclusive day-counts do not rubber-stamp 1.2.
 
-Hosted API eval (`openai/gpt-oss-20b` via Prime Inference / hosted `prime eval run`) is **queued behind wallet funding** — the personal balance is `$0.00`, and inference returns payment required. Add a few dollars of inference credit, then:
+OpenRouter run (2026-08-25): 11/15 exact. The 4 misses were **truncated** mid-reasoning (365-day leap offsets and two `days_between` items) — format never closed, so exact=0. Century leap items (1900-02-28, 2000-02-28) scored 1.2.
 
 ```bash
-prime eval run devtechedge/calendar-math --hosted --follow \
-  -m openai/gpt-4.1-mini -n 20 -r 1 \
-  -a '{"num_eval_examples": 20}' --timeout-minutes 60
-```
-
-```bash
-uv run vf-eval calendar-math -n 20 -r 1 -p prime -m openai/gpt-4.1-mini
+uv run vf-eval calendar-math -n 15 -r 1 -p openrouter \
+  -m minimax/minimax-m2.7:free --max-tokens 1536
 ```
 
 ## Installation

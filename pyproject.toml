@@ -1,6 +1,6 @@
 [project]
 name = "calendar-math"
-version = "0.1.1"
+version = "0.1.2"
 description = "Single-turn calendar arithmetic (date offset, day count, weekday) with a deterministic datetime grader."
 readme = "README.md"
 requires-python = ">=3.10"
