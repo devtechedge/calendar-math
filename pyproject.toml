@@ -1,11 +1,20 @@
 [project]
 name = "calendar-math"
-version = "0.1.2"
+version = "0.1.3"
 description = "Single-turn calendar arithmetic (date offset, day count, weekday) with a deterministic datetime grader."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "devtechedge" }]
+tags = [
+    "single-turn",
+    "math",
+    "calendar",
+    "train",
+    "eval",
+    "verifiable",
+    "rlvr",
+]
 keywords = [
     "rl",
     "rlvr",
@@ -29,3 +38,7 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 include = ["calendar_math.py"]
+
+[tool.verifiers.eval]
+num_examples = 15
+rollouts_per_example = 1
