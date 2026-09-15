@@ -4,7 +4,7 @@ Single-turn **calendar arithmetic** for RLVR / evals on the [Prime Intellect Env
 
 Hub: [devtechedge/calendar-math](https://app.primeintellect.ai/dashboard/environments/devtechedge/calendar-math) · Source: [github.com/devtechedge/calendar-math](https://github.com/devtechedge/calendar-math)
 
-The model is given one of three question types, reasons, and puts a final answer in `<answer>` tags. The grader is pure `datetime` — no LLM-as-judge, no fuzzy string matching on the main reward.
+The model is given one of three question types, reasons, and puts a final answer in `<answer>` tags. The grader is pure `datetime` - no LLM-as-judge, no fuzzy string matching on the main reward.
 
 | Task | Example prompt | Gold answer |
 | --- | --- | --- |
@@ -19,7 +19,7 @@ This is intentionally **not** reverse-text or word-count. Calendar reasoning is 
 - **Verifiable.** Gold answers are produced by Python `datetime.date`. The same functions are the reference solver.
 - **Hard where it matters.** Eval always includes curated edge cases: 1900-02-28 (century, not leap), 2000-02-28 (century, leap), 2024-02-29, year boundaries.
 - **Not gameable by format alone.** Format is a 0.2 bonus. Exact match is the 1.0 term.
-- **Shaping, not noise.** Off-by-one dates / day-counts score 0.5 partial credit — models routinely confuse inclusive vs exclusive counting. Adjacent weekdays score 0.3.
+- **Shaping, not noise.** Off-by-one dates / day-counts score 0.5 partial credit - models routinely confuse inclusive vs exclusive counting. Adjacent weekdays score 0.3.
 - **Configurable.** `num_train_examples`, `num_eval_examples`, `seed`, and an optional `task` pin.
 
 ## Reward

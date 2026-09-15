@@ -2,12 +2,12 @@
 
 The model solves one of three task types:
 
-* ``add_days``     — offset a calendar date by N days
-* ``days_between`` — count midnights between two dates (B − A)
-* ``weekday``      — name the English weekday of a date
+* ``add_days``     - offset a calendar date by N days
+* ``days_between`` - count midnights between two dates (B − A)
+* ``weekday``      - name the English weekday of a date
 
 Answers must be wrapped in ``<answer>...</answer>``. The gold solver is
-Python ``datetime.date`` — the same functions used to build the dataset.
+Python ``datetime.date`` - the same functions used to build the dataset.
 Reward is exact match plus a small XML-format bonus and off-by-one
 partial credit (models routinely confuse inclusive vs exclusive day
 counts, and land one weekday away).
@@ -81,7 +81,7 @@ EDGE_CASES: tuple[dict[str, Any], ...] = (
 
 
 # ---------------------------------------------------------------------------
-# Gold solver — this is the reference solution. Dataset answers are produced
+# Gold solver - this is the reference solution. Dataset answers are produced
 # by these functions, so a correct implementation scores 1.0 by construction.
 # ---------------------------------------------------------------------------
 
@@ -279,7 +279,7 @@ def build_rows(
 
 
 # ---------------------------------------------------------------------------
-# Parser + rubric (stdlib — also used by tests without verifiers installed)
+# Parser + rubric (stdlib - also used by tests without verifiers installed)
 # ---------------------------------------------------------------------------
 
 
@@ -421,7 +421,7 @@ def grade(completion: Any, answer: str, info: dict[str, Any] | None = None) -> d
 
 
 # ---------------------------------------------------------------------------
-# load_environment — Hub / verifiers v0 entrypoint
+# load_environment - Hub / verifiers v0 entrypoint
 # ---------------------------------------------------------------------------
 
 
@@ -441,7 +441,7 @@ def load_environment(
     Parameters
     ----------
     num_train_examples:
-        Size of the train split. Default 500 — dense enough for a first
+        Size of the train split. Default 500 - dense enough for a first
         GRPO run without being a toy set of 8 rows.
     num_eval_examples:
         Size of the eval split. Curated leap-year / century / year-boundary
